@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="jv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Serat Ulem - Mudiyanto & Budi Astuti</title>
+    <!-- Tailwind CSS kagem Styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+    <!-- Font Awesome kagem Ikon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brown: {
+                            800: '#4A3B32',
+                            600: '#8B6A56',
+                            100: '#F5EFE6',
+                            50: '#FAF8F5'
+                        },
+                        gold: '#B89B5E'
+                    },
+                    fontFamily: {
+                        'sans': ['Poppins', 'sans-serif'],
+                        'serif': ['Playfair Display', 'serif'],
+                        'handwriting': ['Great Vibes', 'cursive']
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        body {
+            background-color: #E8E6E1;
+        }
+        .invitation-container {
+            max-width: 480px;
+            margin: 0 auto;
+            background-color: #FAF8F5;
+            min-height: 100vh;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            position: relative;
+            overflow-x: hidden;
+        }
+        /* Animasi Cover */
+        #cover-page {
+            transition: transform 1s ease-in-out, opacity 1s ease-in-out;
+        }
+        .slide-up {
+            transform: translateY(-100%);
+            opacity: 0;
+            pointer-events: none;
+        }
+        .ornament {
+            opacity: 0.15;
+            pointer-events: none;
+        }
+        .fade-in-section {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .fade-in-section.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Tombol Musik (Piringan Hitam) */
+        #music-button {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 100;
+            width: 50px;
+            height: 50px;
+            background-color: #4A3B32; /* Warna cokelat tua */
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #B89B5E; /* Warna emas */
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: none; /* Sembunyikan awalnya */
+        }
+        /* Animasi Muter untuk Tombol Musik */
+        .spin {
+            animation: spin-record 4s linear infinite;
+        }
+        @keyframes spin-record {
+            100% { transform: rotate(360deg); }
+        }
+        /* Efek pause animasi */
+        .paused {
+            animation-play-state: paused;
+        }
+        
+        /* Frame Foto Bulat */
+        .photo-frame {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            border: 4px solid #B89B5E;
+            padding: 5px;
+            margin: 0 auto 20px;
+            background-color: white;
+            box-shadow: 0 10px 25px rgba(139, 106, 86, 0.2);
+        }
+        .photo-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+<body class="antialiased text-brown-800">
+
+    <!-- Audio Player (Sembunyi) -->
+    <!-- Ganti src dengan link lagu MP3 pilihan Anda -->
+    <audio id="bg-music" loop>
+        <!-- Contoh Link MP3 (Gamelan/Jawa instrumental) -->
+        <source src="shalawat.mp3" type="audio/mpeg">
+        Browser Anda tidak mendukung elemen audio.
+    </audio>
+
+    <!-- Tombol Musik Mengambang -->
+    <div id="music-button" onclick="toggleMusic()">
+        <i class="fas fa-compact-disc text-2xl spin" id="music-icon"></i>
+    </div>
+
+    <div class="invitation-container">
+        
+        <!-- ================= COVER PAGE ================= -->
+        <div id="cover-page" class="absolute inset-0 z-50 flex flex-col items-center justify-center bg-brown-50 min-h-screen p-6 text-center">
+            <div class="absolute inset-0 ornament bg-[url('https://www.transparenttextures.com/patterns/cream-paper.png')]"></div>
+            
+            <div class="relative z-10 w-full rounded-2xl border-2 border-gold p-8 bg-white/80 backdrop-blur-sm shadow-lg">
+                <p class="font-serif tracking-widest text-sm text-brown-600 mb-2 uppercase">Serat Ulem</p>
+                <h1 class="font-handwriting text-5xl text-brown-800 my-4 leading-tight">
+                    Mudiyanto<br>&<br>Budi Astuti
+                </h1>
+                
+                <div class="mt-10 mb-8">
+                    <p class="font-sans text-xs text-brown-600 mb-2">Katur Dhumateng Bapak/Ibu/Sadherek:</p>
+                    <p id="guest-name" class="font-serif text-lg font-bold text-brown-800 border-b-2 border-gold pb-1 inline-block min-w-[150px]">
+                        Tamu Undangan
+                    </p>
+                </div>
+                
+                <button onclick="openInvitation()" class="bg-brown-600 text-white font-sans text-sm py-3 px-8 rounded-full shadow-md hover:bg-brown-800 transition duration-300 flex items-center justify-center mx-auto gap-2">
+                    <i class="fas fa-envelope-open-text"></i> Bikak Undangan
+                </button>
+            </div>
+        </div>
+
+        <!-- ================= MAIN CONTENT ================= -->
+        <div id="main-content" class="hidden relative pb-20">
+            
+            <!-- Header Image dengan Foto Pasangan -->
+            <div class="pt-16 pb-8 bg-brown-50 relative overflow-hidden flex flex-col items-center text-center">
+                <!-- Background Hiasan -->
+                <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/floral-flourish.png')] opacity-5"></div>
+                
+                <!-- FRAME FOTO PASANGAN -->
+                <div class="relative z-10 fade-in-section">
+                    <div class="photo-frame">
+                        <!-- Ganti URL gambar di bawah dengan foto prewedding/pasangan Anda -->
+                        <!-- Jika belum ada, biarkan saja pakai gambar bunga ini -->
+                        <img src="foto.jpg" alt="Foto Mudiyanto dan Budi Astuti">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Salam & Pambuka -->
+            <div class="px-8 pt-4 text-center fade-in-section">
+                <h3 class="font-serif font-bold text-xl text-brown-800 mb-4">Assalamu’alaikum Warahmatullahi Wabarakatuh</h3>
+                <p class="font-sans text-sm leading-relaxed text-brown-600 text-justify mb-6">
+                    Kanthi tulus ikhlasing manah lan nenuwun sih rahmatipun Gusti Kang Moho Agung, lumantar serat menika kula sakaluwarga ngaturaken ulem dhumateng panjenengan sedaya.<br><br>
+                    Mugi Gusti paring wekdal lan kalodhangan saengga panjenengan saged rawuh wonten ing adicara pahargyan dhaupipun kawula:
+                </p>
+            </div>
+
+            <!-- Jeneng Penganten -->
+            <div class="text-center my-8 fade-in-section">
+                <h2 class="font-handwriting text-5xl text-brown-800 mb-2">Mudiyanto</h2>
+                <p class="font-serif italic text-gold text-xl">&</p>
+                <h2 class="font-handwriting text-5xl text-brown-800 mt-2">Budi Astuti</h2>
+            </div>
+
+            <!-- Detail Acara -->
+            <div class="px-6 mt-10 fade-in-section">
+                <div class="bg-white rounded-xl shadow-sm border border-brown-100 p-6 relative overflow-hidden">
+                    <div class="absolute left-0 top-0 bottom-0 w-1 bg-gold"></div>
+                    
+                    <p class="font-sans text-sm text-brown-600 text-center mb-6">Ingkang badhe katindakaken benjang ing:</p>
+                    
+                    <div class="flex items-start mb-5">
+                        <div class="bg-brown-100 p-3 rounded-full text-brown-600 mr-4">
+                            <i class="far fa-calendar-alt text-xl"></i>
+                        </div>
+                        <div>
+                            <p class="font-serif font-bold text-brown-800">Dinten & Tanggal</p>
+                            <p class="font-sans text-sm text-brown-600 mt-1">Jum'at, 17 Ramadhan 1447 H</p>
+                            <p class="font-sans text-sm font-medium text-brown-800">6 Maret 2026</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-start mb-5">
+                        <div class="bg-brown-100 p-3 rounded-full text-brown-600 mr-4">
+                            <i class="far fa-clock text-xl"></i>
+                        </div>
+                        <div>
+                            <p class="font-serif font-bold text-brown-800">Wekdal</p>
+                            <p class="font-sans text-sm text-brown-600 mt-1">Tabuh 17.00 WIB - Saparipurnanipun</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-start">
+                        <div class="bg-brown-100 p-3 rounded-full text-brown-600 mr-4">
+                            <i class="fas fa-map-marker-alt text-xl px-1"></i>
+                        </div>
+                        <div>
+                            <p class="font-serif font-bold text-brown-800">Panggenan</p>
+                            <p class="font-sans text-sm font-medium text-brown-800 mt-1">Ayam Guling Tumijah</p>
+                            <p class="font-sans text-xs text-brown-600 mt-1">Jl. Gatot Subroto 25, Temanggung</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Donga & Pangestu -->
+            <div class="px-8 mt-10 text-center fade-in-section">
+                <p class="font-sans text-sm leading-relaxed text-brown-600">
+                    Saperlu paring donga pangestu dhumateng kawulo kekalih, supados dados kaluwarga ingkang sakinah, mawaddah, warahmah, lan barokah.
+                </p>
+            </div>
+
+            <!-- Special Note (Tanpa Amplop) -->
+            <div class="px-6 mt-8 fade-in-section">
+                <div class="bg-brown-600 text-white rounded-xl p-6 text-center shadow-lg relative overflow-hidden">
+                    <div class="absolute -right-4 -top-4 opacity-10 text-6xl">
+                        <i class="fas fa-hand-holding-heart"></i>
+                    </div>
+                    <h3 class="font-serif text-lg font-bold mb-3 flex justify-center items-center gap-2">
+                        <i class="fas fa-info-circle text-gold"></i> Nuwun Sewu
+                    </h3>
+                    <p class="font-sans text-sm leading-relaxed mb-0">
+                        Nyuwun agunging pangaksami bilih <span class="font-semibold text-gold">kawulo mboten nampi bukti katresnan panjenengan arupi menopo kemawon</span> kejawi namung donga pangastutinipun ingkang kitho ajeng-ajeng. Matur nuwun. 🙏
+                    </p>
+                </div>
+            </div>
+
+            <!-- Penutup -->
+            <div class="px-8 mt-12 mb-8 text-center fade-in-section">
+                <p class="font-sans text-sm leading-relaxed text-brown-600 mb-6">
+                    Mekaten serat ulem menika kula aturaken. Awit rawuh lan donga pangestunipun, kula ngaturaken agunging panuwun.
+                </p>
+                <h3 class="font-serif font-bold text-lg text-brown-800 mb-6">Wassalamu’alaikum Warahmatullahi Wabarakatuh</h3>
+                
+                <p class="font-sans text-xs text-brown-500 mb-2">Atur Taklim Kula,</p>
+                <p class="font-serif font-bold text-brown-800">Mudiyanto & Budi Astuti</p>
+                <p class="font-sans text-xs text-brown-600 mt-1">Lan sedoyo kaluwarga</p>
+            </div>
+            
+            <!-- Footer -->
+            <div class="text-center pb-8 pt-4 border-t border-brown-200 mt-10">
+                <p class="font-sans text-[10px] text-brown-400 tracking-widest uppercase">Kagem M & B &copy; 2026</p>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Script kagem Fungsionalitas -->
+    <script>
+        // Deklarasi Variabel Audio
+        const bgMusic = document.getElementById('bg-music');
+        const musicBtn = document.getElementById('music-button');
+        const musicIcon = document.getElementById('music-icon');
+        let isPlaying = false;
+
+        // 1. Mendhet Asma Tamu saking URL
+        document.addEventListener("DOMContentLoaded", function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const guestNameParam = urlParams.get('to');
+            const guestNameElement = document.getElementById('guest-name');
+            
+            if (guestNameParam) {
+                guestNameElement.textContent = decodeURIComponent(guestNameParam);
+            }
+        });
+
+        // 2. Fungsi Bikak Undangan & Putar Musik
+        function openInvitation() {
+            const coverPage = document.getElementById('cover-page');
+            const mainContent = document.getElementById('main-content');
+            
+            mainContent.classList.remove('hidden');
+            coverPage.classList.add('slide-up');
+            
+            // Tampilkan Tombol Musik
+            musicBtn.style.display = 'flex';
+            
+            // Putar Musik Otomatis (Jika diizinkan browser)
+            playMusic();
+            
+            setTimeout(() => {
+                coverPage.style.display = 'none';
+                initScrollAnimations();
+                window.dispatchEvent(new Event('scroll'));
+            }, 1000); 
+        }
+
+        // 3. Fungsi Putar/Jeda Musik
+        function toggleMusic() {
+            if (isPlaying) {
+                pauseMusic();
+            } else {
+                playMusic();
+            }
+        }
+
+        function playMusic() {
+            bgMusic.play().then(() => {
+                isPlaying = true;
+                // Pastikan ikonnya muter (Hapus class paused)
+                musicIcon.classList.remove('paused');
+            }).catch(error => {
+                console.log("Browser memblokir autoplay audio:", error);
+                isPlaying = false;
+                musicIcon.classList.add('paused');
+            });
+        }
+
+        function pauseMusic() {
+            bgMusic.pause();
+            isPlaying = false;
+            // Hentikan putaran ikon (tambah class paused)
+            musicIcon.classList.add('paused');
+        }
+
+        // 4. Efek Fade-in nalika di-scroll
+        function initScrollAnimations() {
+            const sections = document.querySelectorAll('.fade-in-section');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                    }
+                });
+            }, {
+                threshold: 0.1, 
+                rootMargin: "0px 0px -50px 0px"
+            });
+
+            sections.forEach(section => {
+                observer.observe(section);
+            });
+        }
+    </script>
+</body>
+</html>
+
+
